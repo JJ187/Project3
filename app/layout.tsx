@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignUp from './screens/SignUpPage'; // Ajuste le chemin selon ton projet
-import Login from './screens/LoginPage';   // Ajuste le chemin selon ton projet
+import Login from './screens/loginPage.tsx';   // Ajuste le chemin selon ton projet
 
 // Définir les types pour les routes
 type RootStackParamList = {
@@ -23,3 +23,5 @@ export default function Layout() {
     </NavigationContainer>
   );
 }
+
+

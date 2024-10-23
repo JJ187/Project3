@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/router';  // Ajustez ce chemin en fonction de votre projet
+import { RootStackParamList } from '../navigation/router';  // Ajustez ce chemin en fonction de votre projet
 import { login } from '../api';  // Appel à l'API
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -96,3 +96,5 @@ const styles = StyleSheet.create({
 });
 
 export default LoginPage;
+
+

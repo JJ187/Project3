@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../layout';
+import { RootStackParamList } from '../navigation/router';
 import { signUp } from '../api';
 
 type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
@@ -84,3 +84,5 @@ const styles = StyleSheet.create({
 });
 
 export default SignUpPage;
+
+
