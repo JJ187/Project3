@@ -1,38 +1,30 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/router';
+import { useRouter } from 'expo-router'; // Utilisation de expo-router
 import { signUp } from '../api';
 
-type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
-
-type Props = {
-  navigation: SignUpScreenNavigationProp;
-};
-
-const SignUpPage = ({ navigation }: Props) => {
+const SignUpPage = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const router = useRouter(); 
 
   const handleSignUp = async () => {
     try {
       const response = await signUp({ firstName, lastName, email, password });
       if (response.status === 201) {
         Alert.alert('Succès', 'Inscription réussie');
-        navigation.navigate('Login'); // Rediriger vers la page de connexion
+        router.push('/screens/loginPage'); // Redirection avec expo-router
       }
-    } catch (error) {
-        const err = error as any; // Cast de l'erreur comme "any" ou un type spécifique
-      
-        if (err.response && err.response.status === 409) {
-          Alert.alert('Erreur', 'Un utilisateur avec cet email existe déjà');
-        } else {
-          Alert.alert('Erreur', 'Échec de l\'inscription');
-        }
+    } catch (error: any) {
+      if (error.response && error.response.status === 409) {
+        Alert.alert('Erreur', 'Un utilisateur avec cet email existe déjà');
+      } else {
+        Alert.alert('Erreur', 'Échec de l\'inscription');
       }
-      
+    }
   };
 
   return (

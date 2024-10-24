@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/router';  // Ajustez ce chemin en fonction de votre projet
-import { login } from '../api';  // Appel à l'API
+import { useRouter } from 'expo-router'; // Utilisation de expo-router
+import { login } from '../api'; // Appel à l'API
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
-
-type Props = {
-  navigation: LoginScreenNavigationProp;
-};
-
-const LoginPage = ({ navigation }: Props) => {
+const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter(); // Remplacement de la navigation
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -27,7 +22,7 @@ const LoginPage = ({ navigation }: Props) => {
 
       if (response.status === 200) {
         Alert.alert('Succès', 'Connexion réussie');
-        navigation.navigate('Home'); // Rediriger vers la page d'accueil
+        router.push('/screens/MyTasksPage'); // Redirection avec expo-router
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
@@ -41,7 +36,7 @@ const LoginPage = ({ navigation }: Props) => {
   };
 
   const handleSignUpNavigation = () => {
-    navigation.navigate('SignUp'); // Naviguer vers la page d'inscription
+    router.push('/screens/SignUpPage'); // Redirection vers la page d'inscription
   };
 
   return (
@@ -96,5 +91,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginPage;
-
-

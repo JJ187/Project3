@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
-import { Task } from '../models/taches';
+import { View, Text, FlatList, StyleSheet, Alert, Button } from 'react-native';
+import { getTasks } from '../api'; // Fonction d'API
+import { useRouter } from 'expo-router'; // Utilisation de expo-router
+
+type Task = {
+  taskId: string;
+  ownerId: string;
+  title: string;
+  description: string;
+  isDone: boolean;
+  date: string;
+  firstName?: string;
+  lastName?: string;
+};
 
 type Props = {
   userId: string;
@@ -9,11 +20,12 @@ type Props = {
 
 const OtherTasksScreen = ({ userId }: Props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const router = useRouter(); // Utilisation de router pour la navigation
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`/api/tasks-management/get-tasks/${userId}?isDone=false`);
+        const response = await getTasks(userId);
         const otherUsersTasks = response.data.tasks.filter((task: Task) => task.ownerId !== userId);
         setTasks(otherUsersTasks);
       } catch (error) {
@@ -31,6 +43,10 @@ const OtherTasksScreen = ({ userId }: Props) => {
       <Text>{item.description}</Text>
       <Text>Propriétaire: {item.firstName} {item.lastName}</Text>
       <Text>Créé le: {item.date}</Text>
+      <Button
+        title="Voir détails"
+        onPress={() => router.push({ pathname: '/screens/TaskDetailsPage', params: { taskId: item.taskId } })}
+      />
     </View>
   );
 
@@ -66,3 +82,4 @@ const styles = StyleSheet.create({
 });
 
 export default OtherTasksScreen;
+

@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Alert } from 'react-native';
-import axios from 'axios';
-import { Task } from '../models/taches';
+import { View, Text, FlatList, StyleSheet, Alert, Button } from 'react-native';
+import { getTasks } from '../api'; // Import de la fonction d'API
+import { useRouter } from 'expo-router'; // Utilisation de useRouter pour la navigation
+
+type Task = {
+  taskId: string;
+  ownerId: string;
+  title: string;
+  description: string;
+  isDone: boolean;
+  date: string;
+};
 
 type Props = {
   userId: string;
@@ -9,12 +18,13 @@ type Props = {
 
 const MyTasksScreen = ({ userId }: Props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const router = useRouter(); // Utilisation de useRouter pour naviguer
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`/api/tasks-management/get-tasks/${userId}?isDone=false`);
-        setTasks(response.data.tasks); // Assuming the response contains a "tasks" array
+        const response = await getTasks(userId);
+        setTasks(response.data.tasks); // On suppose que la réponse contient un tableau "tasks"
       } catch (error) {
         console.error('Failed to fetch tasks', error);
         Alert.alert('Erreur', 'Impossible de récupérer les tâches');
@@ -29,6 +39,8 @@ const MyTasksScreen = ({ userId }: Props) => {
       <Text style={styles.taskTitle}>{item.title}</Text>
       <Text>{item.description}</Text>
       <Text>Créé le: {item.date}</Text>
+      <Button title="Voir détails" onPress={() => router.push(`/screens/TaskDetailsPage?taskId=${item.taskId}`)} />
+      {/* Cette ligne redirige vers une page de détails, à adapter selon ton projet */}
     </View>
   );
 
@@ -64,3 +76,4 @@ const styles = StyleSheet.create({
 });
 
 export default MyTasksScreen;
+
