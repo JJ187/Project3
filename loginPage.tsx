@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, Text, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router'; 
 import { login } from '../api';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -23,11 +24,11 @@ const LoginPage = () => {
       if (response.status === 200) {
         const userId = response.data.userId; // Assuming the response has a userId
 
-        // Redirect to the HomePage with the userId
-        router.push({
-          pathname: '/screens/HomePage',
-          params: { userId },
-        });
+        // Store userId in AsyncStorage
+        await AsyncStorage.setItem('userId', userId);
+
+        // Redirect to the HomePage
+        router.push('/screens/HomePage');
       }
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
